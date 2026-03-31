@@ -1,0 +1,16 @@
+# Ignore everything by default and explicitly whitelist the reusable workflow.
+/*
+!/.gitignore
+!/README.md
+!/tools/
+!/tools/**
+!/examples/
+!/examples/**
+
+# Ignore generated files even inside whitelisted directories.
+**/__pycache__/
+**/*.pyc
+
+# Keep local lecture outputs and private lecture lists out of git.
+/lecture_*/
+/lecture_list*.json
