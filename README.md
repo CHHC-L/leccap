@@ -124,6 +124,58 @@ python3 tools/leccap_batch.py --list-file /path/to/lecture_list.json --force
 
 ## How To Reproduce The Whole Process
 
+### One-Shot
+
+If you want to recreate this repository in one pass, the most precise prompt is something like:
+
+```bash
+codex "Build a local reusable workflow repo at ~/leccap for extracting slide PDFs from LecCap lecture recordings launched from a University-of-Michigan-style Canvas external tool page. Use macOS Safari as the authenticated browser and assume the user will manually log in first. Implement only reusable workflow code and documentation; do not store credentials, private tokens, real course ids, or real LecCap URLs in tracked files.
+
+Requirements:
+- Create a publishable repo layout with:
+  - tools/leccap_capture.py
+  - tools/leccap_batch.py
+  - tools/build_pdf.swift
+  - examples/lecture_list.example.json
+  - README.md
+  - .gitignore
+- The scope is: get LecCap lecture slide PDFs for the UMich-style system by getting the lecture list from a Canvas external tool page and analyzing the MP4 in each LecCap recording.
+- The single-recording script must:
+  - use Safari automation on macOS
+  - open or select a LecCap player URL in Safari
+  - execute JavaScript in the live LecCap page
+  - extract the lecture MP4 URL, the slide crop rectangle, and the LecCap thumbnail timestamp array from runtime state
+  - download the MP4 if missing
+  - use ffmpeg to crop the slide region at each LecCap thumbnail timestamp into JPGs
+  - build slides.pdf from those JPGs using Swift
+  - write metadata.json
+- The batch script must:
+  - read a JSON lecture list shaped like [{\"date\":\"M/D/YYYY\",\"url\":\"https://leccap.example.edu/leccap/player/r/ID\"}]
+  - create lecture folders named lecture_MM-DD-YYYY
+  - skip already completed lectures unless --force is passed
+- The Swift PDF builder must:
+  - read all JPGs in a lecture's slides/ folder
+  - emit slides.pdf
+- The README must:
+  - explain prerequisites
+  - explain how to use the workflow
+  - explain how to reproduce the whole process
+  - include a short end-to-end summary of the actual process
+  - avoid any real course ids, real LecCap ids, or credentials
+- The .gitignore must:
+  - ignore everything by default
+  - whitelist only the reusable workflow files and example files
+  - ignore generated lecture_* outputs and local lecture list JSON files
+
+Implementation details:
+- Assume Safari Developer settings needed for Apple Events JS are enabled.
+- Use ASCII only.
+- Make the code concise and pragmatic.
+- Do not add extra framework code.
+- Do not keep one-off manual scripts in lecture folders.
+- Keep the repo ready to commit."
+```
+
 ### A. Enumerate LecCap lecture URLs from Canvas
 
 This repo does not currently ship the Canvas lecture-list enumerator as a standalone script.
